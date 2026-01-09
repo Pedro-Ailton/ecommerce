@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shoelé - Admin</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='Img/strike_simb.png') }}" type="image/x-icon">
+</head>
+
+<body>
+    <header id="header2">
+        <div id="logo_container">
+            <img src= "{{ url_for('static', filename='Img/strike.png') }}" alt="Logo da empresa" id="logo_strike">
+        </div>
+        <nav>
+            <ul class="menu">
+                <li class="texto"><a href="#Produto">Calçados</a></li>
+                <li><a href="{{ url_for('login') }}"><span class="material-symbols-outlined" title="{{ nome_usuario }}">account_circle</span></a></li>
+                <li><a href="/admin/adicionar"><span class="material-symbols-outlined">add_2</span></a></li>
+                <li><a href="/admin/deletar"><span class="material-symbols-outlined">delete</span></a></li>
+                <li><a href="/logout"><span class="material-symbols-outlined">logout</span></a></li>
+                
+
+            </ul>
+        </nav>
+    </header>
+    <div id="sacolaModal" class="modal">
+  <div class="modal-conteudo">
+    <span class="fechar" onclick="fecharSacola()">&times;</span>
+    <h2 id="Sacola" class="material-symbols-outlined">Sacola</h2>
+        <div id="lista-sacola">
+     Produtos adicionados serão inseridos aqui 
+    </div>
+    <p id="total-sacola" class="text"><strong>Total:</strong> R$ 0,00</p>
+    <button id="botao_finalizar" onclick="finalizarCompra()" action="/finalizar-compra" method="post">
+        <span class="fonte-menu">Finalizar compra</span>
+    </button>
+  </div>
+
+  </div>
+</div>
+    <main>
+        <section id = "capa">
+            <div class="slider">
+                <div class="slides" id="slides">
+                    {% for imagem in Img %}
+                    <img src="{{ url_for('static', filename='Img/capa1.png') }}" class="slide" />
+                    <img src="{{ url_for('static', filename='Img/capa2.png') }}" class="slide" />
+                    <img src="{{ url_for('static', filename='Img/capa3.png') }}" class="slide" />
+                    {% endfor %}
+                </div>
+                <button class="anterior" onclick="mudarSlide(-1)">❮</button>
+                <button class="proximo" onclick="mudarSlide(1)">❯</button>
+            </div>
+        </section>
+
+        <section id = "Produto">
+            <h3>Nossos produtos</h3>
+                <div class="product-carousel-wrapper">
+                    <button class="anterior" onclick="scrollProdutos(-1)">❮</button>          
+                    <div class="product-container" id="produtos">
+                        <div class="product-grid">
+                            {% for produto in produtos %}
+                                <div class="product-card">
+                                    <img src="{{ url_for('static', filename='uploads/' + produto.imagem) }}" alt="{{ produto.nome }}">
+                                    <h4>{{ produto.nome }}</h4>
+                                    <p>R$ {{ "%.2f"|format(produto.preco) }}</p>
+                                    <button id="botao_compra" onclick="adicionarProduto('{{ produto.nome }}', '{{ produto.preco }}')">
+                                        <span class="fonte-menu">Comprar</span>
+                                    </button>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <button class="proximo" onclick="scrollProdutos(1)">❯</button>
+                </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Equipe: Ana Débora, Pedro Ailton, Miguel Lima</p>
+    </footer>
+
+<script>
+
+    let lastScroll = 0;
+    const header = document.getElementById('header');
+
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.pageYOffset;
+
+      if (currentScroll > lastScroll && currentScroll > 60) {
+        // Rolando para baixo
+        header.classList.add('header-hidden');
+      } else {
+        // Rolando para cima
+        header.classList.remove('header-hidden');
+      }
+
+      lastScroll = currentScroll;
+    });
+    let sacola = [];
+
+    function abrirSacola() {
+    atualizarSacola();
+    document.getElementById("sacolaModal").style.display = "block";
+    }
+
+    function fecharSacola() {
+    document.getElementById("sacolaModal").style.display = "none";
+    }
+
+    function adicionarProduto(nome, preco) {
+    sacola.push({ nome, preco });
+    alert(`${nome} adicionado à sacola.`);
+    }
+
+    function removerProduto(index) {
+    sacola.splice(index, 1);
+    atualizarSacola();
+    }
+
+    function atualizarSacola() {
+    const lista = document.getElementById("lista-sacola");
+    const totalEl = document.getElementById("total-sacola");
+    lista.innerHTML = "";
+
+    let total = 0;
+    sacola.forEach((item, index) => {
+        total += item.preco;
+        lista.innerHTML += `
+        <div>
+            <span>${item.nome} - R$ ${item.preco.toFixed(2)}</span>
+            <button onclick="removerProduto(${index})">Remover</button>
+        </div>`;
+    });
+
+    totalEl.innerHTML = `<strong>Total:</strong> R$ ${total.toFixed(2)}`;
+    }
+
+    function finalizarCompra() {
+    if (sacola.length === 0) {
+        alert("Sua sacola está vazia.");
+        return;
+    }
+
+    alert("Compra finalizada com sucesso!");
+    sacola = [];
+    atualizarSacola();
+    fecharSacola();
+    }
+
+    function scrollProdutos(direcao) {
+        const container = document.getElementById('produtos');
+        const scrollStep = 260; // você pode aumentar esse valor se quiser que pule mais produtos
+        container.scrollBy({
+        left: direcao * scrollStep,
+        behavior: 'smooth'
+        });
+    }
+
+
+
+    function scrollProdutos1(direcao) {
+        const container = document.getElementById('produtos1');
+        const scrollStep = 260; // você pode aumentar esse valor se quiser que pule mais produtos
+        container.scrollBy({
+        left: direcao * scrollStep,
+        behavior: 'smooth'
+        });
+    }
+
+
+    function scrollProdutos2(direcao) {
+        const container = document.getElementById('produtos2');
+        const scrollStep = 260; // você pode aumentar esse valor se quiser que pule mais produtos
+        container.scrollBy({
+        left: direcao * scrollStep,
+        behavior: 'smooth'
+        });
+    }
+
+    
+let slideAtual = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const slidesContainer = document.getElementById('slides');
+
+        function mostrarSlide(index) {
+            slideAtual = (index + totalSlides) % totalSlides;
+            slidesContainer.style.transform = 'translateX(' + (-slideAtual * 100) + '%)';
+        }
+
+        function mudarSlide(n) {
+            mostrarSlide(slideAtual + n);
+            reiniciarAutoSlide();  // Reinicia o temporizador ao clicar no botão
+        }
+
+        // Auto slide
+        let intervalo = setInterval(() => mudarSlide(1), 5000); // a cada 5 segundos
+
+        function reiniciarAutoSlide() {
+            clearInterval(intervalo);
+            intervalo = setInterval(() => mudarSlide(1), 5000);
+        }
+
+        window.onload = () => mostrarSlide(slideAtual);
+
+
+</script>
+
+</body>
+</html>

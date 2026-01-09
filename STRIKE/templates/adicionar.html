@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shoelé - Adicionar Produto</title>
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/adm_fuctions.css') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='Img/strike_simb.png') }}" type="image/x-icon">
+</head>
+<body>
+    {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class="flash-messages">
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+    <div id="form-container">
+        <a href="{{ url_for('admin') }}" class="voltar"><span>&times;</span></a>
+        <form action="{{ url_for('adicionar_item') }}" method="post" enctype="multipart/form-data">
+            <h2 class="fonte-menu">Adicionar Produto (Admin)</h2><br>
+
+            <label class="fonte-menu" for="nome">Nome do Produto:</label><br>
+            <input type="text" class="input-field" name="nome_produto" placeholder="Coloque o nome do produto" required><br><br>
+
+            <label class="fonte-menu" for="descricao">Descrição:</label><br>
+            <textarea name="descricao" placeholder="Coloque a descrição do produto" rows="10" cols="50"></textarea><br><br>
+
+            <label class="fonte-menu" for="preco">Preço (R$):</label><br>
+            <input type="number" class="input-field" name="preco" placeholder="0,00" step="0.01" required><br><br>
+
+            <button type="submit" class="button">
+                <span class="fonte-menu">Adicionar Produto</span>
+            </button><br><br>
+
+            
+        </form>
+    </div>
+</body>
+</html>

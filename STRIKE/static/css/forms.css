@@ -1,0 +1,271 @@
+/*==================== Background ====================*/
+
+html, body{
+  width: 98vw;
+  height: 98vh;
+  padding: 0 auto;
+  display: flex;
+  justify-content:center;
+  align-items: center;
+}
+
+@property --a{
+  syntax: '<angle>';
+  inherits: true;
+  initial-value: 0deg;
+}
+@property --p {
+  syntax: '<percentage>';
+  inherits: true;
+  initial-value: 0%;
+}
+@property --c1 {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #000;
+}
+@property --c2 {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #000;
+}
+
+html {
+  --s: 80px;
+  --_g: #0000, var(--c1) 2deg calc(var(--a) - 2deg),#0000 var(--a);
+  background: 
+    conic-gradient(from calc(-45deg  - var(--a)/2) at top    var(--p) left  var(--p),var(--_g)),
+    conic-gradient(from calc(-45deg  - var(--a)/2) at top    var(--p) left  var(--p),var(--_g)),
+    conic-gradient(from calc( 45deg  - var(--a)/2) at top    var(--p) right var(--p),var(--_g)),
+    conic-gradient(from calc( 45deg  - var(--a)/2) at top    var(--p) right var(--p),var(--_g)),
+    conic-gradient(from calc(-135deg - var(--a)/2) at bottom var(--p) left  var(--p),var(--_g)),
+    conic-gradient(from calc(-135deg - var(--a)/2) at bottom var(--p) left  var(--p),var(--_g)),
+    conic-gradient(from calc( 135deg - var(--a)/2) at bottom var(--p) right var(--p),var(--_g)),
+    conic-gradient(from calc( 135deg - var(--a)/2) at bottom var(--p) right var(--p),var(--_g))
+    var(--c2);
+  background-size: calc(2*var(--s)) calc(2*var(--s));
+  animation: m 3.5s infinite alternate linear;
+}
+
+@keyframes m {
+  0%,15% {
+    --a: 135deg;
+    --p: 20%;
+    --c1: white;
+    --c2: rgb(79,79,79);
+    background-position: 0 0,var(--s) var(--s);
+  }
+  45%,50% {
+    --a: 90deg;
+    --p: 25%;
+    --c1: white;
+    --c2: rgb(79, 79, 79);
+    background-position: 0 0,var(--s) var(--s);
+  }
+  50.01%,55% {
+    --a: 90deg;
+    --p: 25%;
+    --c2: white;
+    --c1: rgb(79,79,79);
+    background-position: var(--s) 0,0 var(--s);
+  }
+  85%,100% {
+    --a: 135deg;
+    --p: 20%;
+    --c2: white;
+    --c1: rgb(79,79,79);
+    background-position: var(--s) 0,0 var(--s);
+  }
+}
+
+/*==================== Formulário ====================*/
+
+#form-container{
+  display: flex;
+  background-color: white;
+  padding: 35px;
+  padding-bottom: 60px;
+  width: 400px;
+  height: 600px;
+  border-radius: 10px;
+  border: 1px solid #ccc; 
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  position: relative;
+}
+
+#form-container2{
+  display: flex;
+  background-color: white;
+  padding: 35px;
+  padding-bottom: 60px;
+  width: 40%;
+  height: 60%;
+  border-radius: 10px;
+  border: 1px solid #ccc; 
+  justify-content: center;
+  align-items: center ;
+  flex-wrap: wrap;
+  position: relative;
+}
+
+select{
+  width: 343px;
+  justify-content: center;
+  align-items: center;
+  height:35px;
+  border: 1px solid #ccc; 
+}
+
+option{
+  font-size: larger;
+}
+#togglePassword{
+  cursor: pointer;
+  position: absolute;
+  right: 40px;
+  top: calc(75% - 58px);
+  font-size: 20pt;
+  color: #777;
+}
+
+#togglePassword:hover{
+  color: #333;
+}
+
+.input-field{
+  font-family: "Oswald", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  font-size: normal;
+  padding-left: 5px;
+  width: 400px;
+  height: 24pt;
+  font-size: 12pt;
+  border: 1px solid #ccc;
+}
+
+.input-field::placeholder{
+  font-family: "Oswald", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  font-size: normal;
+  padding-left: 5px;
+  font-size: 12pt;
+  color: #aaa;
+}
+#up_pw{
+  font-family: "Oswald", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  font-size: normal;
+  margin-right: 208px;
+}
+
+#c_account{
+  font-family: "Oswald", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  font-size: normal;
+}
+
+
+button{
+  position: absolute;
+  border: 1px solid #ccc; 
+  border-radius: 4px; 
+  background-color: #f0f0f0; 
+  margin-right: 100px;
+  transition: all .35s;
+  transform: translate(-50%, -50%);
+  margin-top: 30px;
+  bottom: 35px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px;
+}
+
+button span{
+  position: relative;
+  z-index:2;
+}
+
+button:after{
+  position: absolute;
+  content: "";
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: rgb(79,79,79);
+  transition: all .35s;
+  border-radius: 4px; 
+}
+
+button:hover{
+  color: #fff;
+}
+
+button:hover::after{
+  width: 100%;
+}
+
+#fechar-container{
+  position: absolute;
+  top: 30px;
+  left: 30px;
+}
+
+#logo_container{
+  width: 250px;
+  height: 250px;
+  margin-bottom: -100px;
+}
+
+#logo_strike{
+  width: 100%;
+  height: 100%;
+  object-fit: cover
+}
+
+.fechar {
+  color: #aaa;
+  float: left;
+  font-size: 28px;
+  font-weight: lighter;
+  cursor: pointer;
+  font-size: normal;
+}
+
+.fechar:hover {
+  color: #222222;
+}
+/*==================== Fontes ====================*/
+
+.fonte-menu{
+  font-family: "Oswald", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  font-size: 16pt;
+}
+
+.fonte-menu1{
+  font-family: "Oswald", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+  font-size: 12pt;
+}
+
+.flash-messages {
+  background-color: #ffe0e0;
+  border: 1px solid #ffaaaa;
+  color: #a33;
+  font-weight: bold;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  text-align: center;
+}

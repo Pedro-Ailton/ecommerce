@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shoelé - Nova Senha</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/forms.css') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='Img/strike_simb.png') }}" type="image/x-icon">
+</head>
+<body>
+    {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class="flash-messages">
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+     <div id="form-container">
+      <div id="fechar-container">
+        <a href="/login"><span class="fechar">❮</span></a>
+      </div>
+        <form action="/nova-senha" method="post">
+            <label class="fonte-menu">Email:</label><br>
+            <input type="email" class="input-field" name="email" required><br><br>
+            
+            <label class="fonte-menu">Nova Senha:</label><br>
+            <input type="password" class="input-field" name="senha1" required><br><br>
+            <label class="fonte-menu">Confirmar Senha:</label><br>
+            <input type="password" class="input-field" name="senha2" required><br><br><br>
+
+            <div id = "d">
+                <button type="submit" class="button"><span class="fonte-menu">Enviar</span></button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

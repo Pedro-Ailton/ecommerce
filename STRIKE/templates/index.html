@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strike</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/client.css') }}">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='Img/strike_simb.png') }}" type="image/x-icon">
+</head>
+
+<body>
+    <header id="header">
+    <div id="logo_container">
+        <img src="{{ url_for('static', filename='Img/strike.png') }}" alt="Logo da empresa" id="logo_strike">
+    </div>
+    <nav>
+        <ul class="menu">
+            <li class="texto" title="Nossos calçados"><a href="#Produto">Calçados</a></li>
+            <li onclick="abrirSacola()" action="/finalizar-compra">
+                <span class="material-symbols-outlined" title="Sacola">shopping_bag</span>
+            </li>
+            
+            {% if logged_in %}
+            <li>
+                <a href="/logout">
+                    <span class="material-symbols-outlined" title="Saída">logout</span>
+                </a>
+            </li>
+            {% else %}
+            <li>
+                <a href="{{ url_for('login') }}">
+                    <span class="material-symbols-outlined" title="Login">account_circle</span>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+</header>
+    <div id="sacolaModal" class="modal">
+        <div class="modal-conteudo">
+            <span class="fechar" onclick="fecharSacola()">&#10006;</span>
+            <h2 id="Sacola" class="material-symbols-outlined">Sacola</h2>
+            <div id="lista-sacola">
+
+            </div>
+            <p id="total-sacola" class="text"><strong>Total:</strong> R$ 0,00</p>
+            <button id="botao_finalizar">
+                <span class="fonte-menu" onclick="finalizarCompra()">Finalizar compra</span>
+            </button>
+        </div>
+    </div>
+    <main>
+        <section id = "capa">
+            
+            <div class="slider">
+                <div class="slides" id="slides">
+                    {% for banner in banners %}
+                        <img src="{{ url_for('static', filename='Img/BANNER-1.png') }}" class="slide" />
+                    {% endfor %}
+                </div>
+                <button class="anterior" onclick="mudarSlide(-1)">❮</button>
+                <button class="proximo" onclick="mudarSlide(1)">❯</button> 
+            </div>
+            
+        </section>
+
+        <section id = "Produto">
+            <h3>Nossos produtos</h3>
+                
+                <div class="product-carousel-wrapper">
+                    <button class="anterior" onclick="scrollProdutos(-1)">❮</button>
+                    <div class="product-container" id="produtos">
+                        <div class="product-grid">
+                            {% for produto in produtos %}
+                                <div class="product-card">
+                                    <a href="/produto/{{ produto.nome }}">
+                                        <img src="{{ url_for('static', filename='uploads/' + produto.imagem) }}" alt="{{ produto.nome }}">
+                                        <h4>{{ produto.nome }}</h4>
+                                    </a>
+
+                                    <p>R$ {{ "%.2f"|format(produto.preco) }}</p>
+                                    <button id="botao_compra" onclick="adicionarProduto('{{ produto.nome }}', '{{ produto.preco }}')">
+                                        <span class="fonte-menu">Comprar</span>
+                                    </button>
+                                </div>
+                                <div id="produtoModal" class="modal">
+                                    <div class="modal-conteudo">
+                                        <span class="fechar" onclick="fecharProduto()">&#10006;</span>
+                                        <h2 class="material-symbols-outlined"> {{ produto.nome }}</h2>
+                                        <button id="botao_compra" onclick="adicionarProduto('{{ produto.nome }}', '{{ produto.preco }}')">
+                                            <span class="fonte-menu">Comprar</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <button class="proximo" onclick="scrollProdutos(1)">❯</button>
+                </div>
+                
+        </section>
+    </main>
+
+    <footer>
+        <p>Equipe: Ana Débora, Pedro Ailton, Miguel Lima
+        </p>
+    </footer>
+
+<script>
+    let prevScrollPos = window.scrollY;
+const header = document.getElementById("header");
+const headerHeight = header.offsetHeight; // Get the header's actual height
+
+window.addEventListener("scroll", () => {
+    const currentScrollPos = window.scrollY;
+
+    if (prevScrollPos < currentScrollPos) {
+        // Scrolling down: hide header
+        header.style.top = `-${headerHeight}px`;
+    } else {
+        // Scrolling up: show header
+        header.style.top = "0";
+    }
+
+    prevScrollPos = currentScrollPos;
+});
+    let sacola = [];
+
+    function abrirSacola() {
+    atualizarSacola();
+    document.getElementById("sacolaModal").style.display = "block";
+    }
+
+    function fecharSacola() {
+    document.getElementById("sacolaModal").style.display = "none";
+    }
+
+    function adicionarProduto(nome, preco) {
+    const precoNum = parseFloat(preco);
+    if (isNaN(precoNum)) {
+        alert("Erro ao adicionar produto: preço inválido.");
+        return;
+    }
+    sacola.push({ nome, preco: precoNum });
+    alert(`${nome} adicionado à sacola.`);
+}
+
+    function removerProduto(index) {
+    sacola.splice(index, 1);
+    atualizarSacola();
+    }
+
+    function atualizarSacola() {
+    const lista = document.getElementById("lista-sacola");
+    const totalEl = document.getElementById("total-sacola");
+    lista.innerHTML = "";
+
+    let total = 0;
+    sacola.forEach((item, index) => {
+        total += item.preco;
+        lista.innerHTML += `
+        <div>
+            <span>${item.nome} - R$ ${item.preco.toFixed(2)}</span>
+            <button onclick="removerProduto(${index})">Remover</button>
+        </div>`;
+    });
+
+    totalEl.innerHTML = `<strong>Total:</strong> R$ ${total.toFixed(2)}`;
+    }
+
+    function finalizarCompra() {
+    if (sacola.length === 0) {
+        alert("Sua sacola está vazia.");
+        return;
+    }
+
+    alert("Compra finalizada com sucesso!");
+    sacola = [];
+    atualizarSacola();
+    fecharSacola();
+    }
+
+    function scrollProdutos(direcao) {
+        const container = document.getElementById('produtos');
+        const scrollStep = 375; // você pode aumentar esse valor se quiser que pule mais produtos
+        container.scrollBy({
+        left: direcao * scrollStep,
+        behavior: 'smooth'
+        });
+    }
+
+    function scrollProdutos1(direcao) {
+        const container = document.getElementById('produtos1');
+        const scrollStep = 260; // você pode aumentar esse valor se quiser que pule mais produtos
+        container.scrollBy({
+        left: direcao * scrollStep,
+        behavior: 'smooth'
+        });
+    }
+
+
+    function scrollProdutos2(direcao) {
+        const container = document.getElementById('produtos2');
+        const scrollStep = 260; // você pode aumentar esse valor se quiser que pule mais produtos
+        container.scrollBy({
+        left: direcao * scrollStep,
+        behavior: 'smooth'
+        });
+    }
+
+    
+let slideAtual = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const slidesContainer = document.getElementById('slides');
+
+        function mostrarSlide(index) {
+            slideAtual = (index + totalSlides) % totalSlides;
+            slidesContainer.style.transform = 'translateX(' + (-slideAtual * 100) + '%)';
+        }
+
+        function mudarSlide(n) {
+            mostrarSlide(slideAtual + n);
+            reiniciarAutoSlide();  // Reinicia o temporizador ao clicar no botão
+        }
+
+        // Auto slide
+        let intervalo = setInterval(() => mudarSlide(1), 5000); // a cada 5 segundos
+
+        function reiniciarAutoSlide() {
+            clearInterval(intervalo);
+            intervalo = setInterval(() => mudarSlide(1), 5000);
+        }
+
+        window.onload = () => mostrarSlide(slideAtual);
+
+
+</script>
+
+</body>
+</html>

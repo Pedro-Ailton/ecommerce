@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adicionar Endereço - Shoelé</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style2.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='Img/strike_simb.png') }}" type="image/x-icon">
+
+</head>
+<body>
+    {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class="flash-messages">
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+    <form id="form-container2" action="/finalizar-compra" method="post">
+
+        <label class="fonte-menu">CEP:</label>
+        <input type="text" id="cep" name="cep" maxlength="9" onblur="buscarCEP()" required><br>
+
+        <label class="fonte-menu">Endereço (Rua):</label>
+        <input type="text" id="endereco" name="endereco" required><br>
+
+        <label class="fonte-menu">Número:</label>
+        <input type="text" id="numero" name="numero" required><br>
+
+        <label class="fonte-menu">Complemento:</label>
+        <input type="text" id="complemento" name="complemento"><br>
+
+        <label class="fonte-menu">Cidade:</label>
+        <input type="text" id="cidade" name="cidade" required><br>
+
+        <label class="fonte-menu">Estado (UF):</label>
+        <input type="text" id="estado" name="estado" required><br>
+
+        <button type="submit" class="button"><span class="fonte-menu">Finalizar</span></button>
+    </form>
+
+    <script>
+    function buscarCEP() {
+        let cep = document.getElementById('cep').value.replace(/\D/g, '');
+
+        if (cep.length !== 8) {
+            alert("CEP inválido. Deve conter 8 números.");
+            return;
+        }
+
+        fetch(`https://viacep.com.br/ws/${cep}/json/`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.erro) {
+                    alert("CEP não encontrado.");
+                    return;
+                }
+
+                document.getElementById('endereco').value = data.logradouro || '';
+                document.getElementById('bairro')?.remove();  // ignorado se não houver no banco
+                document.getElementById('cidade').value = data.localidade || '';
+                document.getElementById('estado').value = data.uf || '';
+            })
+            .catch(() => alert("Erro ao buscar o CEP."));
+    }
+    </script>
+</body>
+</html>
