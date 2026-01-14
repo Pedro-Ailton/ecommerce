@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, session, url_for, flash, current_app
-from models import Produtos, Fotos, Categorias, Estoque, Clientes, Enderecos, Admins, cadastrar_admin
 from db import db
+from models import Produtos,ImagemProduto, Categoria_Produto, Categorias, Estoque, Clientes, Enderecos, Admins
+from seed import init_datas
 import os
 from dotenv import load_dotenv, dotenv_values 
 from werkzeug.utils import secure_filename
@@ -12,31 +13,29 @@ app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 
 # =================== Conexão com o banco de dados ===================
 
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DB")
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 db.init_app(app)
 
 # =================== Página inicial ===================
 
 @app.route('/')
 def index():
-    banners = ['Img/BANNER-1.png']
+    banners = ['Img/BANNERS/BANNER-1.png']
     if 'usuario' in session and session.get('tipo') == 'Cliente':
         cliente = Clientes.query.filter_by(email=session['usuario']).first()
         
         nome_usuario = cliente.nome if cliente else 'Usuário Desconhecido'
         produtos = db.session.execute(db.select(Produtos)).scalars().all()
-        return render_template('index.html', usuario=session['usuario'], produtos=produtos, nome_usuario=nome_usuario)
+        imagens = db.session.execute(db.select(ImagemProduto)).scalars().all()
+        return render_template('index.html', usuario=session['usuario'], produtos=produtos, nome_usuario=nome_usuario, imagens=imagens, banners = banners)
     else:
         produtos = db.session.execute(db.select(Produtos)).scalars().all()
-        return render_template('index.html',produtos=produtos,banners = banners)
+        imagens = db.session.execute(db.select(ImagemProduto)).scalars().all()
+        return render_template('index.html',produtos=produtos,banners = banners, imagens=imagens)
 
 
-# =================== Página do Produto ====================
 
-@app.route('/produto/<int:id>')
-def produto(id):
-    sapato = db.session.execute(db.select(Produtos).filter_by(id=id)).scalar.one
-    return render_template('produto.html', sapato=sapato)
+    
 
 # =================== Login ===================
 
@@ -88,18 +87,19 @@ def finalizar_compra():
 def admin():
     if 'usuario' in session and session.get('tipo') == 'Administrador':
         produtos = Produtos.query.all()
-        
+        imagens = db.session.execute(db.select(ImagemProduto)).scalars().all()
         # Buscar administrador pelo email
         administrador = Admins.query.filter_by(email=session['usuario']).first()
         
-        imagens = ['Img/banner1.jpg', 'Img/banner2.jpg', 'Img/banner3.jpg']
+        banners = ['Img/BANNERS/BANNER-1.png']
         nome_usuario = administrador.nome if administrador else 'Usuário Desconhecido'
         
         return render_template('admin.html', 
                              usuario=session['usuario'], 
                              produtos=produtos, 
-                             Img=imagens, 
-                             nome_usuario=nome_usuario)
+                             banners=banners, 
+                             nome_usuario=nome_usuario,
+                            imagens=imagens)
     else:
         return redirect('/')
 
@@ -113,9 +113,8 @@ def adicionar_item():
             nome = request.form.get('nome_produto')
             descricao = request.form.get('descricao')
             preco = request.form.get('preco')
-            imagem = request.files.get('imagem')
 
-            if not nome or not preco or not imagem:
+            if not nome or not preco:
                 flash("Campos obrigatórios não foram preenchidos!")
                 return redirect(request.url)
 
@@ -129,7 +128,6 @@ def adicionar_item():
             db.session.add(novo_produto)
             db.session.commit()
 
-            flash("Produto adicionado com sucesso!")
             return redirect(url_for('admin'))
 
         return render_template('adicionar.html')
@@ -166,6 +164,22 @@ def pagina_deletar():
     else:
         return redirect('/')
 
+# ================= Rota para gerenciar o estoque ===================
+@app.route('/admin/estoque', methods=['GET', 'POST'])
+def gerenciar_estoque():
+    if 'usuario' in session and session.get('tipo') == 'Administrador':
+        produtos = Produtos.query.all()
+        estoque = Estoque.query.all()
+
+        if request.method == 'POST':
+            produto_id = request.form.get('produto_id')
+            quantidade = request.form.get('quantidade')
+
+            
+
+        return render_template('gerenciar_estoque.html', produtos=produtos, estoque=estoque)
+    else:
+        return redirect('/')
 
 # =================== Logout ===================
 
@@ -249,10 +263,48 @@ def cadastro():
         return redirect('/login')
 
     return render_template('cadastro.html')
+
+# =================== Página do Produto ====================
+
+@app.route('/produto/<int:id>', methods=['GET', 'POST'])
+def produto(id):
+    produto = Produtos.query.get(id)
+    produto_imagem = ImagemProduto.query.filter_by(produto_id=id).all()
+
+    return render_template('produto.html', produto=produto, fotos=produto_imagem)
+
+# =================== Editar Produto ====================
+@app.route('/admin/editar/<int:id>', methods=['GET', 'POST'])
+def editar_produto(id):
+    if 'usuario' in session and session.get('tipo') == 'Administrador':
+        produto = Produtos.query.get(id)
+
+        if request.method == 'POST':
+            nome = request.form.get('nome_produto')
+            descricao = request.form.get('descricao')
+            preco = request.form.get('preco')
+
+            if not nome or not preco:
+                flash("Campos obrigatórios não foram preenchidos!")
+                return redirect(request.url)
+
+            produto.nome = nome
+            produto.descricao = descricao
+            produto.preco = float(preco)
+
+            db.session.commit()
+
+            flash("Produto atualizado com sucesso!")
+            return redirect(url_for('admin'))
+
+        return render_template('editar_produto.html', produto=produto)
+    else:
+        return redirect('/')
+    
 # =================== Debug ===================
 
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-        cadastrar_admin()
+        init_datas()
     app.run(debug=True)

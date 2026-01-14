@@ -7,6 +7,7 @@ class TipoMovimentacao(Enum):
     ENTRADA = 'entrada'
     SAIDA = 'saida'
 
+
 class Produtos(db.Model):
     __tablename__ = "produtos"
 
@@ -15,13 +16,22 @@ class Produtos(db.Model):
     descricao = db.Column(db.Text, nullable = True)
     preco = db.Column(db.Numeric(3,2), nullable = False)
 
-class Fotos(db.Model):
-    __tablename__ = "fotos"
+    imagens = db.relationship(
+        'ImagemProduto',
+        backref='produto',
+        cascade='all, delete-orphan',
+        lazy=True
+    )
 
-    id = db.Column(db.Integer, primary_key = True)
-    imagem = db.Column(db.String(255), nullable = False)
-    descricao = db.Column(db.Text, nullable = True)
-    produto_id = db.Column(db.Integer, db.ForeignKey('produtos.id'), nullable = False)
+class ImagemProduto(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    produto_id = db.Column(
+        db.Integer,
+        db.ForeignKey('produtos.id'),
+        nullable=False
+    )
+    arquivo = db.Column(db.String(255), nullable=False)
+    principal = db.Column(db.Boolean, default=False)
     
 
 class Categorias(db.Model):
@@ -90,22 +100,9 @@ class Movimentacoes(db.Model):
     __tablename__ ="movimentacoes"
 
     id = db.Column(db.Integer, primary_key = True)
-    quant = db.Column(db.Integer, nullable = False)
     tipo = db.Column(db.Boolean, nullable=False)
     data_mov = db.Column(db.DateTime, server_default=func.now(), nullable=False)
 
     estoque_id = db.Column(db.Integer, db.ForeignKey('estoque.id'), nullable=False)
     admin_id = db.Column(db.Integer, db.ForeignKey('admins.id'), nullable=False)
 
-def cadastrar_admin():
-    admin1 = Admins(
-        nome = "Admin",
-        email = "admin@email.com",
-        senha = "senha123"
-    )
-
-    admin_cadastrado = Admins.query.filter_by(email = "admin@email.com").first()
-
-    if not admin_cadastrado:
-        db.session.add(admin1)
-        db.session.commit()

@@ -1,0 +1,32 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: 'Oswald', sans-serif;
+    background-color: #f5f5f5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+footer{
+  display: flex;
+  background-color: #333;
+  align-items: center;
+  color: white;
+  height: 40px;
+  padding: 40px;
+}
+footer p{
+  color: white;
+}
+a{
+  text-decoration: none;
+  color: inherit;
+}
+/* ===================== Produtos ======================= */

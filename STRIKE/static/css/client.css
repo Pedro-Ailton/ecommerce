@@ -45,8 +45,8 @@ html, body{
   display: flex;
   flex-wrap: wrap;
   padding:15px;
-  align-items: center; /* Manter aqui! */
-  gap: 40px; /* Espaçamento entre os itens do menu */
+  align-items: center;
+  gap: 40px; 
   margin: 0 ;
   list-style: none;
 }
@@ -65,7 +65,7 @@ html, body{
 
 .menu li:hover a,
 .menu li:hover .material-symbols-outlined {
-    color: gray;
+    color: rgb(222, 222, 222);
     cursor: pointer;
 }
 
@@ -139,15 +139,6 @@ main {
 
 }
 
-#Qsomos{
-  padding: 15px 50px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
-  overflow-x: auto;
-  max-width: 100%;
-  background-color: #f0f0f0;
-}
 #Produto{
   padding-bottom: 20px;
   padding-left: 50px;
@@ -161,6 +152,68 @@ main {
   background-color: #eeeeee;
 }
 
+#produto-detalhes{
+  margin-left: 50px;
+  margin-top: 20px;
+  font-family: 'Oswald', sans-serif;
+
+}
+
+.produto-imagem{
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+.produto-info{
+  margin-top: 20px;
+  font-family: 'Oswald', sans-serif;
+}
+
+.produto-info h2{
+  font-family: 'Oswald', sans-serif;
+  font-size: xx-large;
+}
+
+.produto-info p{
+  font-family: 'Oswald', sans-serif;
+  font-size: large;
+  color: #28a745;
+  font-weight: bold;
+}
+
+.produto-preco{
+  font-family: 'Oswald', sans-serif;
+  font-size: large;
+  color: #28a745;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.produto-descricao{
+  margin-top: 20px;
+  font-family: 'Oswald', sans-serif;
+  line-height: 1.6;
+
+}
+
+#botao_compra{
+  position: relative;
+  background-color: #f0f0f0;
+  color: rgb(0, 0, 0);
+  padding: 12px 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  padding: 15px;
+  transition: all .35s;
+  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
+  left: 2.3rem;
+}
+
 footer{
   display: flex;
   background-color: #333;
@@ -172,6 +225,10 @@ footer{
 
 footer p{
   color: white;
+}
+a{
+  text-decoration: none;
+  color: inherit;
 }
 
 /* ===================== Produtos ======================= */
@@ -263,9 +320,11 @@ footer p{
 /* ===================== Background ===================== */
 
 #capa{
-  margin-top: 25px;
+  width: 100%;
+  height: auto;
   margin-bottom: 20px;
   object-fit:contain;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2)
 }
 
 .slider {

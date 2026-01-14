@@ -50,10 +50,11 @@
         <section id = "capa">
             <div class="slider">
                 <div class="slides" id="slides">
-                    {% for imagem in Img %}
-                    <img src="{{ url_for('static', filename='Img/capa1.png') }}" class="slide" />
-                    <img src="{{ url_for('static', filename='Img/capa2.png') }}" class="slide" />
-                    <img src="{{ url_for('static', filename='Img/capa3.png') }}" class="slide" />
+                    {% for banner in banners %}
+                        <img src="{{ url_for('static', filename=banner) }}" class="slide"/>
+                        <div class="slide-overlay">
+                            <span class="material-symbols-outlined">edit</span>
+                        </div>
                     {% endfor %}
                 </div>
                 <button class="anterior" onclick="mudarSlide(-1)">❮</button>
@@ -61,22 +62,46 @@
             </div>
         </section>
 
+        <section id="admin-panel">
+            <h2>Painel de Administração</h2>
+            <p>Bem-vindo, {{ nome_usuario }}! Aqui você pode gerenciar os produtos da loja.</p>
+            <div class="admin-actions">
+                <a href="/admin/adicionar" class="admin-button"><span class="material-symbols-outlined">add_2</span><p>Adicionar produto</p></a>
+                <a href="/admin/deletar" class="admin-button"><span class="material-symbols-outlined">delete</span><p>Deletar produto</p></a>
+                <a href="/admin/estoque" class="admin-button"><span class="material-symbols-outlined">package_2</span><p>Gerenciar estoque</p></a>
+            </div>
+        </section>
+            </div>
+        </section>
         <section id = "Produto">
             <h3>Nossos produtos</h3>
                 <div class="product-carousel-wrapper">
-                    <button class="anterior" onclick="scrollProdutos(-1)">❮</button>          
+                    <button class="anterior" onclick="scrollProdutos(-1)">❮</button>
                     <div class="product-container" id="produtos">
                         <div class="product-grid">
                             {% for produto in produtos %}
-                                <div class="product-card">
-                                    <img src="{{ url_for('static', filename='uploads/' + produto.imagem) }}" alt="{{ produto.nome }}">
-                                    <h4>{{ produto.nome }}</h4>
-                                    <p>R$ {{ "%.2f"|format(produto.preco) }}</p>
-                                    <button id="botao_compra" onclick="adicionarProduto('{{ produto.nome }}', '{{ produto.preco }}')">
-                                        <span class="fonte-menu">Comprar</span>
-                                    </button>
-                                </div>
+                                <a href="/admin/editar/{{ produto.id }}">
+                                    <div class="product-card">
+                                        {% for imagem in imagens %}
+                                        {% if imagem.produto_id == produto.id %}
+                                            <img src="{{ url_for('static', filename='uploads/produtos/' + imagem.arquivo) }}" alt="{{ produto.nome }}" title="{{ produto.nome}}">
+                                        {% else %}
+                                            <div class="placeholder-image" title="Produto sem imagem">
+                                                <div class="no-image">
+                                                    <span class="no-image">produto sem imagem</span>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                        {% endfor %}
+                                        
+                                            <h4>{{ produto.nome }}</h4>
+                                        
+                                        <p>R$ {{ "%.2f"|format(produto.preco) }}</p>
+                                        
+                                    </div>
                             {% endfor %}
+                                </a>
+                                    
                         </div>
                     </div>
                     <button class="proximo" onclick="scrollProdutos(1)">❯</button>
@@ -86,7 +111,7 @@
     </main>
 
     <footer>
-        <p>Equipe: Ana Débora, Pedro Ailton, Miguel Lima</p>
+        <p>Esse sistema é apenas uma simulação para estudos do desenvolverdor.</p>
     </footer>
 
 <script>

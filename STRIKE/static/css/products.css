@@ -1,0 +1,97 @@
+/* ============== Reset ================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Oswald', sans-serif;
+    font-size: medium;
+}
+
+/* ============== Header ================= */
+
+header {
+  background-color: #f0f0f0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  height: 100px;
+  transition: top 0.3s ease;
+  overflow: hidden;
+}
+
+#logo_container{
+  width: 10rem;
+  height: 5rem;
+}
+
+#logo_strike{
+  width: 100%;
+  height: 100%;
+  object-fit: cover
+}
+
+.menu {
+  display: flex;
+  flex-wrap: wrap;
+  padding:15px;
+  align-items: center;
+  gap: 40px; 
+  margin: 0 ;
+  list-style: none;
+}
+
+.menu li a,
+.menu li {
+    text-decoration: none;
+    font-family: "Oswald", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 800;
+    font-style: normal;
+    color: black;
+    transition: color 0.3s;
+    margin: 0;
+}
+
+.menu li:hover a,
+.menu li:hover .material-symbols-outlined {
+    color: gray;
+    cursor: pointer;
+}
+
+.material-symbols-outlined {
+    font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24;
+    font-size: 24px;
+    color: black;
+    transition: color 0.3s;
+}
+
+
+/* ============== Body ================= */
+
+body{
+    display: flex;
+    background-color: #eeecec;
+
+}
+main{
+    width: 100%;
+    margin-top: 120px;
+    padding: 20px;
+    
+}
+img-conteiner{
+    width: 100%;
+    height: auto;
+}

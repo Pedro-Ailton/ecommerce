@@ -1,12 +1,13 @@
 /*==================== Background ====================*/
 
 html, body{
-  width: 98vw;
-  height: 98vh;
+  height: 100%;
+  width: 100%;
   padding: 0 auto;
   display: flex;
   justify-content:center;
   align-items: center;
+  overflow-x: hidden;
 }
 
 @property --a{
@@ -86,7 +87,7 @@ html {
   padding: 35px;
   padding-bottom: 60px;
   width: 400px;
-  height: 600px;
+  height: auto;
   border-radius: 10px;
   border: 1px solid #ccc; 
   justify-content: center;
@@ -95,23 +96,8 @@ html {
   position: relative;
 }
 
-#form-container2{
-  display: flex;
-  background-color: white;
-  padding: 35px;
-  padding-bottom: 60px;
-  width: 40%;
-  height: 60%;
-  border-radius: 10px;
-  border: 1px solid #ccc; 
-  justify-content: center;
-  align-items: center ;
-  flex-wrap: wrap;
-  position: relative;
-}
-
 select{
-  width: 343px;
+  width: 346px;
   justify-content: center;
   align-items: center;
   height:35px;
@@ -125,12 +111,57 @@ option{
   cursor: pointer;
   position: absolute;
   right: 40px;
-  top: calc(75% - 58px);
+  top: calc(70% - 4px);
   font-size: 20pt;
   color: #777;
 }
 
 #togglePassword:hover{
+  color: #333;
+}
+
+#togglePassword1{
+  cursor: pointer;
+  position: absolute;
+  right: 40px;
+  top: calc(62% + 3px);
+  font-size: 20pt;
+  color: #777;
+}
+#togglePassword1:hover{
+  color: #333;
+}
+#togglePassword2{
+  cursor: pointer;
+  position: absolute;
+  right: 40px;
+  top: calc(75% + 3px);
+  font-size: 20pt;
+  color: #777;
+}
+#togglePassword2:hover{
+  color: #333;
+}
+#togglePassword3{
+  cursor: pointer;
+  position: absolute;
+  right: 40px;
+  top: calc(35% + 4px);
+  font-size: 20pt;
+  color: #777;
+}
+#togglePassword3:hover{
+  color: #333;
+}
+#togglePassword4{
+  cursor: pointer;
+  position: absolute;
+  right: 40px;
+  top: calc(50% + 21px);
+  font-size: 20pt;
+  color: #777;
+}
+#togglePassword4:hover{
   color: #333;
 }
 
@@ -144,6 +175,28 @@ option{
   height: 24pt;
   font-size: 12pt;
   border: 1px solid #ccc;
+}
+
+#input-field-password{
+  font-family: "Oswald", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  font-size: normal;
+  padding-left: 5px;
+  width: 400px;
+  height: 24pt;
+  font-size: 12pt;
+  border: 1px solid #ccc;
+}
+
+#input-field-password::placeholder{
+  font-family: "Oswald", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  font-size: normal;
+  padding-left: 5px;
+  font-size: 12pt;
+  color: #aaa;
 }
 
 .input-field::placeholder{
@@ -172,15 +225,13 @@ option{
 
 
 button{
-  position: absolute;
+  position: relative;
   border: 1px solid #ccc; 
   border-radius: 4px; 
   background-color: #f0f0f0; 
-  margin-right: 100px;
+  margin-top: 20px;
   transition: all .35s;
   transform: translate(-50%, -50%);
-  margin-top: 30px;
-  bottom: 35px;
   left: 50%;
   transform: translateX(-50%);
   padding: 10px;
@@ -213,14 +264,18 @@ button:hover::after{
 
 #fechar-container{
   position: absolute;
-  top: 30px;
-  left: 30px;
+  display: block;
+  width: 100rem;
+  top: 15px;
+  left: 420px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 #logo_container{
   width: 250px;
   height: 250px;
-  margin-bottom: -100px;
 }
 
 #logo_strike{
@@ -232,14 +287,15 @@ button:hover::after{
 .fechar {
   color: #aaa;
   float: left;
-  font-size: 28px;
-  font-weight: lighter;
+  font-size: 32pt;
+  font-weight: normal;
   cursor: pointer;
   font-size: normal;
 }
 
 .fechar:hover {
   color: #222222;
+  font-weight: bold;
 }
 /*==================== Fontes ====================*/
 

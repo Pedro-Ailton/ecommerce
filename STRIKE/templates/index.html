@@ -25,7 +25,9 @@
             <li onclick="abrirSacola()" action="/finalizar-compra">
                 <span class="material-symbols-outlined" title="Sacola">shopping_bag</span>
             </li>
-            
+            <li>
+                <span class="material-symbols-outlined" title="Endereço">location_on</span>
+            </li>
             {% if logged_in %}
             <li>
                 <a href="/logout">
@@ -61,7 +63,7 @@
             <div class="slider">
                 <div class="slides" id="slides">
                     {% for banner in banners %}
-                        <img src="{{ url_for('static', filename='Img/BANNER-1.png') }}" class="slide" />
+                        <img src="{{ url_for('static', filename='Img/BANNERS/BANNER-1.png') }}" class="slide" />
                     {% endfor %}
                 </div>
                 <button class="anterior" onclick="mudarSlide(-1)">❮</button>
@@ -78,26 +80,24 @@
                     <div class="product-container" id="produtos">
                         <div class="product-grid">
                             {% for produto in produtos %}
-                                <div class="product-card">
-                                    <a href="/produto/{{ produto.nome }}">
-                                        <img src="{{ url_for('static', filename='uploads/' + produto.imagem) }}" alt="{{ produto.nome }}">
+                                <a href="/produto/{{ produto.id }}">
+                                    <div class="product-card">
+                                        {% for imagem in imagens %}
+                                        {% if imagem.produto_id == produto.id %}
+                                            <img src="{{ url_for('static', filename='uploads/produtos/' + imagem.arquivo) }}" alt="{{ produto.nome }}" title="{{ produto.nome}}">
+                                        {% else %}
+                                            <div class="placeholder-image" title="Produto sem imagem">
+                                                <div class="no-image">
+                                                    <span class="no-image">produto sem imagem</span>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                        {% endfor %}
+                                        
                                         <h4>{{ produto.nome }}</h4>
-                                    </a>
-
-                                    <p>R$ {{ "%.2f"|format(produto.preco) }}</p>
-                                    <button id="botao_compra" onclick="adicionarProduto('{{ produto.nome }}', '{{ produto.preco }}')">
-                                        <span class="fonte-menu">Comprar</span>
-                                    </button>
-                                </div>
-                                <div id="produtoModal" class="modal">
-                                    <div class="modal-conteudo">
-                                        <span class="fechar" onclick="fecharProduto()">&#10006;</span>
-                                        <h2 class="material-symbols-outlined"> {{ produto.nome }}</h2>
-                                        <button id="botao_compra" onclick="adicionarProduto('{{ produto.nome }}', '{{ produto.preco }}')">
-                                            <span class="fonte-menu">Comprar</span>
-                                        </button>
+                                        <p>R$ {{ "%.2f"|format(produto.preco) }}</p>
                                     </div>
-                                </div>
+                                </a>
                             {% endfor %}
                         </div>
                     </div>
@@ -243,5 +243,4 @@ let slideAtual = 0;
 </script>
 
 </body>
-
 </html>

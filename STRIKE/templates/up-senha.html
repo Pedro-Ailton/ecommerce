@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shoelé - Nova Senha</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/forms.css') }}">
+    <title>Strike - Nova Senha</title>
+    <link rel ="stylesheet" href="{{ url_for('static', filename='css/forms.css') }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
-  <link rel="shortcut icon" href="{{ url_for('static', filename='Img/strike_simb.png') }}" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='Img/strike_simb.png') }}" type="image/x-icon">
 </head>
 <body>
     {% with messages = get_flashed_messages() %}
@@ -23,21 +24,39 @@
 {% endwith %}
      <div id="form-container">
       <div id="fechar-container">
-        <a href="/login"><span class="fechar">❮</span></a>
+        <a href="/login"><span class="fechar">&times;</span></a>
       </div>
         <form action="/nova-senha" method="post">
             <label class="fonte-menu">Email:</label><br>
-            <input type="email" class="input-field" name="email" required><br><br>
+            <input type="email" class="input-field" name="email" placeholder="Digite seu email"><br><br>
             
-            <label class="fonte-menu">Nova Senha:</label><br>
-            <input type="password" class="input-field" name="senha1" required><br><br>
-            <label class="fonte-menu">Confirmar Senha:</label><br>
-            <input type="password" class="input-field" name="senha2" required><br><br><br>
+            <label class="fonte-menu">Nova senha:</label><br>
+            <input type="password" class="input-field" name="senha1" placeholder="Crie uma nova senha" required>
+            <span class="material-symbols-outlined" id="togglePassword3" title="Mostrar senha"> visibility </span><br><br>
+            <label class="fonte-menu">Confirmar senha:</label><br>
+            <input type="password" class="input-field" name="senha2" placeholder="Confirme sua senha">
+            <span class="material-symbols-outlined" id="togglePassword4" title="Mostrar senha"> visibility </span><br><br><br>
 
-            <div id = "d">
-                <button type="submit" class="button"><span class="fonte-menu">Enviar</span></button>
-            </div>
+            
+            <button type="submit" class="button"><span class="fonte-menu">Enviar</span></button>
+            
         </form>
     </div>
 </body>
+<script>
+  const togglePassword3 = document.querySelector('#togglePassword3');
+  const password3 = document.querySelector('input[name="senha1"]');
+  togglePassword3.addEventListener('click', function (e) {
+      const type = password3.getAttribute('type') === 'password' ? 'text' : 'password';
+      password3.setAttribute('type', type);
+      this.textContent = type === 'password' ? 'visibility' : 'visibility_off';
+  });
+  const togglePassword4 = document.querySelector('#togglePassword4');
+  const password4 = document.querySelector('input[name="senha2"]');
+  togglePassword4.addEventListener('click', function (e) {
+      const type = password4.getAttribute('type') === 'password' ? 'text' : 'password';
+      password4.setAttribute('type', type);
+      this.textContent = type === 'password' ? 'visibility' : 'visibility_off';
+  });
+</script>
 </html>

@@ -1,51 +1,11 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{sapato.nome}}</title>
-    
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/client.css') }}">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='Img/crown-removebg-preview.png') }}" type="image/x-icon">
-
+    <title>{{produto.nome}}</title>
 </head>
 <body>
-    <header id="header">
-        <div id="logo_container">
-            <a href="{{ url_for('home')}}" title="voltar para página principal">
-                <img src="{{ url_for('static', filename='Img/Shoele.png') }}" alt="Logo da empresa" id="logo_shoele" >
-            </a>
-        </div>
-        <nav>
-            <ul class="menu">
-                <li class="texto"><a href="#Produto">Calçados</a></li>
-                <li onclick="abrirSacola()" action="/finalizar-compra">
-                    <span class="material-symbols-outlined">shopping_bag</span>
-                </li>
-                <li>
-                    <a href="{{ url_for('login') }}">
-                        <span class="material-symbols-outlined" title="{{ nome_usuario }}">account_circle</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/logout">
-                        <span class="material-symbols-outlined">logout</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <div>
-            <div>
-                <img src="{{ url_for('static', filename='uploads/' + sapato.imagem) }}" alt="{{ sapato.nome }}" title="{{ sapato.nome }}">
-            </div>
-        </div>
-    </main>
+    
 </body>
 </html>

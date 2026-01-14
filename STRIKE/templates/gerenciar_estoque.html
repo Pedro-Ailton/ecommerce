@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Estoque</title>
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='Img/strike_simb.png') }}" type="image/x-icon">
+</head>
+<body>
+    <header id="header2">
+        <div id="logo_container">
+            <img src= "{{ url_for('static', filename='Img/strike.png') }}" alt="Logo da empresa" id="logo_strike">
+        </div>
+        <nav>
+            <ul class="menu">
+                <li class="texto"><a href="#Produto">Calçados</a></li>
+                <li><a href="{{ url_for('login') }}"><span class="material-symbols-outlined" title="{{ nome_usuario }}">account_circle</span></a></li>
+                <li><a href="/admin/adicionar"><span class="material-symbols-outlined">add_2</span></a></li>
+                <li><a href="/admin/deletar"><span class="material-symbols-outlined">delete</span></a></li>
+                <li><a href="/logout"><span class="material-symbols-outlined">logout</span></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="gerenciar-estoque">
+            <h1>Gerenciar Estoque</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Produto</th>
+                        <th>Quantidade em Estoque</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for produto in produtos and pd in estoque %}
+                    <tr>
+                        <td>{{ produto.nome }}</td>
+                        <td>{{ pd.quantidade }}</td>
+                        <td>
+                            <form action="/admin/estoque/atualizar/{{ produto.id }}" method="post">
+                                <input type="number" name="quantidade" min="0" value="{{ produto.estoque }}" required>
+                                <button type="submit">Atualizar</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </main>
+</body>
+</html>

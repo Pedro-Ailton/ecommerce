@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shoelé - Cadastro</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/forms.css') }}">
+    <link rel ="stylesheet" href="{{ url_for('static', filename='css/forms.css') }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
-  <link rel="shortcut icon" href="{{ url_for('static', filename='Img/strike_simb.png') }}" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='Img/strike_simb.png') }}" type="image/x-icon">
 </head>
 <body>
     {% with messages = get_flashed_messages() %}
@@ -23,25 +24,66 @@
 {% endwith %}
      <div id="form-container">
       <div id="fechar-container">
-        <a href="/login"><span class="fechar">❮</span></a>
+        <a href="/login"><span class="fechar">&times;</span></a>
       </div>
         <form action="/cadastro" method="post">
             <label class="fonte-menu">Nome:</label><br>
             <input type="text" class="input-field" name="nome" placeholder="Insira seu nome" required><br><br>
             <label class="fonte-menu">CPF:</label><br>
-            <input type="text" class="input-field" name="cpf" placeholder="000.000.000-00" required><br><br>
+            <input type="text" class="input-field" name="cpf" maxlength="14" placeholder="000.000.000-00" required><br><br>
             <label class="fonte-menu">Telefone:</label><br>
-            <input type="tel" class="input-field" name="telefone" placeholder="(99) 99999-9999" pattern="[0-9]{5}-[0-9]{4}"><br><br>
+            <input type="tel" class="input-field" name="telefone" maxlength="15" placeholder="(99) 99999-9999" pattern="[0-9]{5}-[0-9]{4}"><br><br>
             <label class="fonte-menu">Email:</label><br>
             <input type="email" class="input-field" name="email" placeholder="Insira seu email" required><br><br>
-            <label class="fonte-menu">Insira Senha:</label><br>
-            <input type="password" class="input-field" name="senha1" required><br><br>
-            <label class="fonte-menu">Confirmar Senha:</label><br>
-            <input type="password" class="input-field" name="senha2"><br><br><br><br>
-
+            <label class="fonte-menu">Senha:</label><br>
+            <input type="password" class="input-field" name="senha1" placeholder="Registre sua senha" required>
+            <span class="material-symbols-outlined" id="togglePassword1" title="Mostrar senha"> visibility </span><br><br>
+            <label class="fonte-menu">Confirmar Senha:</label>
+            <br>
+            <input type="password" class="input-field" name="senha2" placeholder="Confirme sua senha" required>
+            <span class="material-symbols-outlined" id="togglePassword2" title="Mostrar senha"> visibility </span>
             <button type="submit" class="button"><span class="fonte-menu">Enviar</span></button>
 
         </form>
     </div>
 </body>
+<script>
+
+  document.querySelector('input[name="cpf"]').addEventListener('input', function (e) {
+    e.target.value = formatCPF(e.target.value);
+  });
+  const formatCPF = (cpf) => {
+    cpf = cpf.replace(/\D/g, '');
+    cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
+    cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
+    cpf = cpf.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    return cpf;
+  }
+  document.querySelector('input[name="telefone"]').addEventListener('input', function (e) {
+    e.target.value = formatPhone(e.target.value);
+  });
+  const formatPhone = (phone) => {
+    phone = phone.replace(/\D/g, '');
+    phone = phone.replace(/(\d{2})(\d)/, '($1) $2');
+    phone = phone.replace(/(\d{5})(\d)/, '$1-$2');
+    return phone;
+  }
+
+  const togglePassword = document.querySelector('#togglePassword1');
+  const password = document.querySelector('input[name="senha1"]');
+
+  togglePassword.addEventListener('click', function () {
+    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+    password.setAttribute('type', type);
+    this.textContent = type === 'password' ? 'visibility' : 'visibility_off';
+  });
+
+  const togglePassword1 = document.querySelector('#togglePassword2');
+  const password1 = document.querySelector('input[name="senha2"]');
+  togglePassword1.addEventListener('click', function () {
+    const type = password1.getAttribute('type') === 'password' ? 'text' : 'password';
+    password1.setAttribute('type', type);
+    this.textContent = type === 'password' ? 'visibility' : 'visibility_off';
+  });
+</script>
 </html>

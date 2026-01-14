@@ -23,7 +23,7 @@
 {% endwith %}
     <div id="form-container">
       <div id="fechar-container">
-        <a href="/"><span class="fechar">❮</span></a>
+        <a href="/"><span class="fechar">&times;</span></a>
       </div>
       <div id="logo_container">
           <a href="/"><img src= "{{ url_for('static', filename='Img/strike.png') }}" alt="Logo da empresa" id="logo_strike"></a>
@@ -40,10 +40,11 @@
             <label class="fonte-menu">Email:</label><br>
             <input type="email" class="input-field" name="email" placeholder="Digite seu email"><br><br>
             
-            <label class="fonte-menu">Senha:</label>
-            <br>
-            <input type="password" class="input-field" name="senha" placeholder="Digite sua senha" required>
+            <label class="fonte-menu">Senha:</label><br>
+            <input type="password" id="input-field-password" name="senha" placeholder="Digite sua senha" required>
+
             <span class="material-symbols-outlined" id="togglePassword" title="Mostrar senha"> visibility </span><br>
+
             <a href="{{ url_for('up_senha') }}" id="up_pw">Esqueceu a senha?</a>
             <a id="c_account" href="{{ url_for('cadastro') }}"> Cadastre-se aqui</a><br><br>
             
@@ -55,7 +56,7 @@
 </body>
 <script>
 const togglePassword = document.querySelector('#togglePassword');
-const password = document.querySelector('#senha');
+const password = document.querySelector('#input-field-password');
 togglePassword.addEventListener('click', function (e) {
     // toggle the type attribute
     const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
