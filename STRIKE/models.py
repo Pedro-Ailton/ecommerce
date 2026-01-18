@@ -1,7 +1,10 @@
 from db import db
-from datetime import datetime
+import datetime
 from sqlalchemy import func
 from enum import Enum
+from zoneinfo import ZoneInfo
+
+offset = datetime.timedelta(hours= -3)
 
 class TipoMovimentacao(Enum):
     ENTRADA = 'entrada'
@@ -74,6 +77,7 @@ class Enderecos(db.Model):
     estado = db.Column(db.String(25), nullable = False)
     cliente_id = db.Column(db.Integer, db.ForeignKey('clientes.id'), nullable=False)
 
+
 class Admins(db.Model):
     __tablename__ = "admins"
     id = db.Column(db.Integer, primary_key = True)
@@ -100,9 +104,22 @@ class Movimentacoes(db.Model):
     __tablename__ ="movimentacoes"
 
     id = db.Column(db.Integer, primary_key = True)
-    tipo = db.Column(db.Boolean, nullable=False)
-    data_mov = db.Column(db.DateTime, server_default=func.now(), nullable=False)
+    tipo = db.Column(db.Enum(TipoMovimentacao), nullable = False)
+    quantidade = db.Column(db.Integer, nullable= False)
+    data_mov = db.Column(db.DateTime, default=lambda: datetime.now(datetime.timezone.utc), nullable=False)
 
+    produto_id = db.Column(db.Integer, db.ForeignKey('produtos.id'), nullable = False)
     estoque_id = db.Column(db.Integer, db.ForeignKey('estoque.id'), nullable=False)
     admin_id = db.Column(db.Integer, db.ForeignKey('admins.id'), nullable=False)
 
+    produto = db.relationship('Produtos', backref='movimentacoes')
+    estoque = db.relationship('Estoque', backref='movimentacoes')
+    admin = db.relationship('Admins', backref='movimentacoes')
+
+    @property
+    def data_mov_br(self):
+        if self.data_mov.tzinfo is None:
+            dt = self.data_mov.replace(tzinfo=datetime.timezone.utc)
+        else:
+            dt = self.data_mov
+        return dt.astimezone(ZoneInfo("America/Sao_Paulo"))

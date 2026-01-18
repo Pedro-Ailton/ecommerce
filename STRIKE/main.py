@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, session, url_for, flash, current_app
+from sqlalchemy import func
 from db import db
-from models import Produtos,ImagemProduto, Categoria_Produto, Categorias, Estoque, Clientes, Enderecos, Admins
+from models import Produtos,ImagemProduto, Categoria_Produto, Categorias, Estoque, Clientes, Enderecos, Admins, Movimentacoes
 from seed import init_datas
 import os
 from dotenv import load_dotenv, dotenv_values 
@@ -170,14 +171,69 @@ def gerenciar_estoque():
     if 'usuario' in session and session.get('tipo') == 'Administrador':
         produtos = Produtos.query.all()
         estoque = Estoque.query.all()
+        movimentacoes = Movimentacoes.query.all()
 
         if request.method == 'POST':
             produto_id = request.form.get('produto_id')
             quantidade = request.form.get('quantidade')
-
+            tamanho = request.form.get('tamanho')
+            cor = request.form.get('cor')
+            tipo_movimentacao = request.form.get('tipo_movimentacao')
             
 
-        return render_template('gerenciar_estoque.html', produtos=produtos, estoque=estoque)
+            if not all([produto_id, quantidade, tamanho, cor, tipo_movimentacao]):
+                flash("Todos os campos devem ser preenchidos!")
+                return redirect('/admin/estoque')
+            
+            quantidade = int(quantidade)
+
+            estoque_item = Estoque.query.filter_by(produto_id = produto_id, tamanho = tamanho, cor = cor).first()
+
+            if not estoque_item:
+                if tipo_movimentacao == "SAIDA":
+                    flash('Não é possível dar saída em um item sem estoque.')
+                    return redirect('/admin/estoque')
+                
+                estoque_item = Estoque(
+                    produto_id = produto_id,
+                    tamanho = tamanho,
+                    cor = cor,
+                    quantidade = 0
+                )
+                db.session.add(estoque_item)
+                
+                if tipo_movimentacao == "ENTRADA":
+                    estoque_item.quantidade += quantidade
+
+                elif tipo_movimentacao == "SAIDA":
+                    if estoque_item.quantidade < quantidade:
+                        flash('Quantidade insuficiente no estoque!')
+                        return redirect('admin/estoque')
+                    estoque_item.quantidade -= quantidade
+
+                else:
+                    flash=('Tipo de registro inválido')
+                    return redirect('admin/estoque')
+                
+            
+                
+
+                
+            admin = Admins.query.filter_by(email=session['usuario']).first()
+                
+            nova_movimentacao = Movimentacoes(
+                    produto_id=produto_id,
+                    data_mov= func.now(),
+                    tipo=tipo_movimentacao,
+                    quantidade = int(quantidade),
+                    estoque_id = estoque_item.id,
+                    admin_id = admin.id
+                )
+            db.session.add(nova_movimentacao)
+            db.session.commit()
+            
+            return redirect('/admin/estoque')
+        return render_template('gerenciar_estoque.html', produtos=produtos, estoque=estoque, movimentacoes = movimentacoes)
     else:
         return redirect('/')
 
@@ -219,7 +275,7 @@ def up_senha():
     return render_template('up-senha.html')
 
 
-# =================== Cadastro de clientes e administradores ===================
+# =================== Cadastro de clientes  ===================
 
 @app.route('/cadastro', methods=['GET', 'POST'])
 def cadastro():
@@ -278,7 +334,7 @@ def produto(id):
 def editar_produto(id):
     if 'usuario' in session and session.get('tipo') == 'Administrador':
         produto = Produtos.query.get(id)
-
+        imagens = ImagemProduto.query.filter_by(produto_id=id).all()
         if request.method == 'POST':
             nome = request.form.get('nome_produto')
             descricao = request.form.get('descricao')
@@ -297,7 +353,59 @@ def editar_produto(id):
             flash("Produto atualizado com sucesso!")
             return redirect(url_for('admin'))
 
-        return render_template('editar_produto.html', produto=produto)
+        return render_template('editar_produto.html', produto=produto, imagens=imagens)
+    else:
+        return redirect('/')
+    
+# =================== Rota para adicionar imagens ao produto ===================
+@app.route('/admin/editar/<int:id>/adicionar-imagem', methods=['POST'])
+def adicionar_imagem_produto(id):
+    if 'usuario' in session and session.get('tipo') == 'Administrador':
+        produto = Produtos.query.get(id)
+        if not produto:
+            flash("Produto não encontrado!")
+            return redirect(url_for('admin'))
+
+        if 'imagem' not in request.files:
+            flash("Nenhuma imagem selecionada!")
+            return redirect(request.url)
+
+        imagem_file = request.files['imagem']
+        if imagem_file.filename == '':
+            flash("Nenhum arquivo selecionado!")
+            return redirect(request.url)
+
+        if imagem_file:
+            filename = secure_filename(imagem_file.filename)
+            caminho_salvar = os.path.join(current_app.root_path, 'static/Img/Produtos', filename)
+            imagem_file.save(caminho_salvar)
+
+            nova_imagem = ImagemProduto(
+                produto_id=id,
+                caminho_imagem=f'Img/Produtos/{filename}'
+            )
+            db.session.add(nova_imagem)
+            db.session.commit()
+
+            flash("Imagem adicionada com sucesso!")
+            return redirect(url_for('editar_produto', id=id))
+    else:
+        return redirect('/')
+
+# ================== Rota para deletar imagens do produto ===================
+@app.route('/admin/editar/<int:id>/deletar-imagem/<int:imagem_id>', methods=['POST'])
+def deletar_imagem_produto(id, imagem_id):
+    if 'usuario' in session and session.get('tipo') == 'Administrador':
+        imagem = ImagemProduto.query.get(imagem_id)
+        if not imagem:
+            flash("Imagem não encontrada!")
+            return redirect(url_for('editar_produto', id=id))
+
+        db.session.delete(imagem)
+        db.session.commit()
+
+        flash("Imagem deletada com sucesso!")
+        return redirect(url_for('editar_produto', id=id))
     else:
         return redirect('/')
     

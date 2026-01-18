@@ -7,6 +7,7 @@ html, body{
   display: flex;
   justify-content:center;
   align-items: center;
+  box-sizing: border-box;
 }
 
 @property --a{
@@ -121,17 +122,19 @@ option{
 }
 
 .input-field{
+  margin-top: 5px;
   font-family: "Oswald", sans-serif;
   font-weight: 300;
   font-style: normal;
   font-size: normal;
-  width: 400px;
+  width: 100%;
   height: 24pt;
   font-size: 12pt;
   border: 1px solid #ccc;
 }
 
 textarea{
+  margin-top: 5px;
   resize: none;        
   box-sizing: border-box; 
   font-family: "Oswald", sans-serif;
@@ -140,7 +143,7 @@ textarea{
   font-size: normal;
   font-size: 12pt;
   padding: 5px;
-  width: 400px;
+  width: 100%;
   height: 150px;
   border: 1px solid #ccc;
 }
@@ -156,7 +159,7 @@ textarea::placeholder{
 }
 
 .input-field[type="number"]{
-  width: 200px;
+  width: 50%;
   height: 24pt;
   font-size: 12pt;
   border: 1px solid #ccc;
@@ -164,6 +167,7 @@ textarea::placeholder{
   font-weight: 300;
   font-style: normal;
   font-size: normal;
+  direction: rtl;
 }
 .input-field::placeholder{
   font-family: "Oswald", sans-serif;
@@ -234,10 +238,7 @@ button:hover::after{
 }
 
 /*======================  =====================*/
-#descricao{
-    width: 400px;
-    height: 80px;
-}
+
 #preco{
   height: 21pt;
   font-size: 12pt;
@@ -259,7 +260,7 @@ a{
   margin-top: 20%;
 }
 .voltar{
-  margin-left: 350px;
+  margin-left: calc(100% - 20px);
   font-size: 40px;
   float: right;
   display: flex;

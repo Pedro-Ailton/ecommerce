@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Produto</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/forms.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/products.css') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
@@ -15,31 +15,44 @@
     
 </head>
 <body>
-    <h1>Editar {{ produto.nome }}</h1>
-    <div class="product-image">
-        {% if produto.imagem %}
-            <img src="{{ url_for('static', filename='uploads/' + produto.imagem) }}" alt="{{ produto.nome }}" width="200">
-        {% else %}
-            <div class="placeholder-image" title="Sem imagem">
-                <span class="no-image">Sem imagem</span>
-            </div>
-        {% endif %}
-    </div>
-    <form action="/admin/editar/{{ produto.id }}" method="post" enctype="multipart/form-data">
-        <label for="nome">Nome:</label>
-        <input type="text" id="nome" name="nome" value="{{ produto.nome }}" required><br><br>
+    <header id="header">
+        <div id="logo_container">
+            <img src="{{ url_for('static', filename='Img/strike.png') }}" alt="Logo da empresa" id="logo_strike">
+        </div>
+        <nav>
+            <ul class="menu">
+                
+                <li>
+                    <a href="/logout">
+                        <span class="material-symbols-outlined" title="Saída">logout</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div id="edit-image-product">
+            {% if imagens %}
+                <h2>Imagens do Produto</h2>
+                <div class="image-gallery">
+                    {% for imagem in imagens %}
+                        <div class="image-item">
+                            <img src="{{ url_for('static', filename='uploads/' ~ imagem.arquivo) }}" alt="Imagem do Produto" class="product-image">
+                            <form action="{{ url_for('deletar_imagem_produto', id=imagem.produto_id, imagem_id=imagem.id) }}" method="post">
+                                <button type="submit" class="delete-button">Deletar Imagem</button>
+                            </form>
 
-        <label for="descricao">Descrição:</label>
-        <textarea id="descricao" name="descricao" required>{{ produto.descricao }}</textarea><br><br>
-
-        <label for="preco">Preço:</label>
-        <input type="number" id="preco" name="preco" step="0.01" value="{{ produto.preco }}" required><br><br>
-
-        <label for="imagem">Imagem:</label>
-        <input type="file" id="imagem" name="imagem"><br><br>
-
-        <button type="submit">Salvar Alterações</button>
-    </form>
-    
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="no-images">
+                    <a href="/admin/editar/{{ id }}/adicionar-imagem" class="add-image-link">
+                        <span > + </span>
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </main>
 </body>
 </html>

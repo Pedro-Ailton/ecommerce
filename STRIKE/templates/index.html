@@ -16,34 +16,34 @@
 
 <body>
     <header id="header">
-    <div id="logo_container">
-        <img src="{{ url_for('static', filename='Img/strike.png') }}" alt="Logo da empresa" id="logo_strike">
-    </div>
-    <nav>
-        <ul class="menu">
-            <li class="texto" title="Nossos calçados"><a href="#Produto">Calçados</a></li>
-            <li onclick="abrirSacola()" action="/finalizar-compra">
-                <span class="material-symbols-outlined" title="Sacola">shopping_bag</span>
-            </li>
-            <li>
-                <span class="material-symbols-outlined" title="Endereço">location_on</span>
-            </li>
-            {% if logged_in %}
-            <li>
-                <a href="/logout">
-                    <span class="material-symbols-outlined" title="Saída">logout</span>
-                </a>
-            </li>
-            {% else %}
-            <li>
-                <a href="{{ url_for('login') }}">
-                    <span class="material-symbols-outlined" title="Login">account_circle</span>
-                </a>
-            </li>
-            {% endif %}
-        </ul>
-    </nav>
-</header>
+        <div id="logo_container">
+            <img src="{{ url_for('static', filename='Img/strike.png') }}" alt="Logo da empresa" id="logo_strike">
+        </div>
+        <nav>
+            <ul class="menu">
+                <li class="texto" title="Nossos calçados"><a href="#Produto">Calçados</a></li>
+                <li onclick="abrirSacola()" action="/finalizar-compra">
+                    <span class="material-symbols-outlined" title="Sacola">shopping_bag</span>
+                </li>
+                <li>
+                    <span class="material-symbols-outlined" title="Endereço">location_on</span>
+                </li>
+                {% if logged_in %}
+                <li>
+                    <a href="/logout">
+                        <span class="material-symbols-outlined" title="Saída">logout</span>
+                    </a>
+                </li>
+                {% else %}
+                <li>
+                    <a href="{{ url_for('login') }}">
+                        <span class="material-symbols-outlined" title="Login">account_circle</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
     <div id="sacolaModal" class="modal">
         <div class="modal-conteudo">
             <span class="fechar" onclick="fecharSacola()">&#10006;</span>

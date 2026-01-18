@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerenciar Estoque</title>
     
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/stock.css') }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,6 +15,7 @@
 </head>
 <body>
     <header id="header2">
+        <a href="/admin"><-</a>
         <div id="logo_container">
             <img src= "{{ url_for('static', filename='Img/strike.png') }}" alt="Logo da empresa" id="logo_strike">
         </div>
@@ -29,32 +30,68 @@
         </nav>
     </header>
     <main>
-        <section id="gerenciar-estoque">
-            <h1>Gerenciar Estoque</h1>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Produto</th>
-                        <th>Quantidade em Estoque</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for produto in produtos and pd in estoque %}
-                    <tr>
-                        <td>{{ produto.nome }}</td>
-                        <td>{{ pd.quantidade }}</td>
-                        <td>
-                            <form action="/admin/estoque/atualizar/{{ produto.id }}" method="post">
-                                <input type="number" name="quantidade" min="0" value="{{ produto.estoque }}" required>
-                                <button type="submit">Atualizar</button>
-                            </form>
-                        </td>
-                    </tr>
+        <section id="admin-estoque">
+            <h2>Gerenciar Estoque</h2>
+            <form method="POST" action="/admin/estoque">
+                <label for="produto_id">Produto:</label>
+                <select name="produto_id" id="produto_id" required>
+                    <option value="" disabled selected>Selecione um produto</option>
+                    {% for produto in produtos %}
+                        <option value="{{ produto.id }}">{{ produto.nome }}</option>
                     {% endfor %}
-                </tbody>
-            </table>
+                </select>
+
+                <label for="quantidade">Quantidade:</label>
+                <input type="number" name="quantidade" id="quantidade" min="1" required>
+
+                <label for="tamanho">Tamanho:</label>
+                <input type="text" name="tamanho" id="tamanho" required>
+
+                <label for="cor">Cor:</label>
+                <input type="text" name="cor" id="cor" required>
+
+                <label for="tipo_movimentacao">Tipo de Movimentação:</label>
+                <select name="tipo_movimentacao" id="tipo_movimentacao" required>
+                    <option value="" disabled selected>Selecione o tipo</option>
+                    <option value="ENTRADA">Entrada</option>
+                    <option value="SAIDA">Saída</option>
+                </select>
+
+                <button type="submit">Atualizar Estoque</button>
+            </form>
         </section>
+        <Section id="historico-movimentacoes">
+            <h2>Histórico de movimentações</h2>
+            <div>
+                <table>
+                    <thead>
+                      <tr>
+                        <th>Prod.</th>
+                        <th>Quant.</th>
+                        <th>Tam.</th>
+                        <th>Cor</th>
+                        <th>Tipo</th>
+                        <th>Data</th>
+                        <th>ADM.</th>
+                    </tr>  
+                    </thead>
+                    <tbody>
+                        {% for movimentacao in movimentacoes %}
+                        <tr>
+                                <td>{{ movimentacao.produto.nome }}</td>
+                                <td>{{ movimentacao.quantidade }}</td>
+                                <td>{{ movimentacao.estoque.tamanho }}</td>
+                                <td>{{ movimentacao.estoque.cor }}</td>
+                                <td>{{ movimentacao.tipo.value }}</td>
+                                <td>{{ movimentacao.data_mov_br.strftime('%d/%m/%Y %H:%M') }}</td>
+                                <td>{{ movimentacao.admin.nome }}</td>  
+                        </tr>
+                        {%endfor%}
+                    </tbody>
+                </table>
+            </div>
+        </Section>
+        
     </main>
 </body>
 </html>
