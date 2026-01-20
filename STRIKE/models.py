@@ -52,7 +52,8 @@ class Estoque(db.Model):
     quantidade = db.Column(db.Integer, default = 0, nullable = False)
 
     produto_id = db.Column(db.Integer, db.ForeignKey('produtos.id'), nullable=False)
-
+    produto = db.relationship('Produtos', backref='estoque')
+    
 class Clientes(db.Model):
     __tablename__ = "clientes"
 

@@ -209,12 +209,52 @@ def gerenciar_estoque():
                     if estoque_item.quantidade < quantidade:
                         flash('Quantidade insuficiente no estoque!')
                         return redirect('admin/estoque')
-                    estoque_item.quantidade -= quantidade
+                    else:
+                        estoque_item.quantidade -= quantidade
+                        return redirect('admin/estoque')
 
                 else:
                     flash=('Tipo de registro inválido')
                     return redirect('admin/estoque')
+            else:
+                if tipo_movimentacao == "ENTRADA":
+                    estoque_item.quantidade += quantidade
+                    admin = Admins.query.filter_by(email=session['usuario']).first()
                 
+                    nova_movimentacao = Movimentacoes(
+                                produto_id=produto_id,
+                                data_mov= func.now(),
+                                tipo=tipo_movimentacao,
+                                quantidade = int(quantidade),
+                                estoque_id = estoque_item.id,
+                                admin_id = admin.id
+                            )
+                    db.session.add(nova_movimentacao)
+                    db.session.commit()
+                    return redirect('estoque')
+
+                elif tipo_movimentacao == "SAIDA":
+                    if estoque_item.quantidade < quantidade:
+                        flash('Quantidade insuficiente no estoque!')
+                        return redirect('admin/estoque')
+                    else:
+                        estoque_item.quantidade -= quantidade
+                        admin = Admins.query.filter_by(email=session['usuario']).first()
+                
+                        nova_movimentacao = Movimentacoes(
+                                produto_id=produto_id,
+                                data_mov= func.now(),
+                                tipo=tipo_movimentacao,
+                                quantidade = int(quantidade),
+                                estoque_id = estoque_item.id,
+                                admin_id = admin.id
+                            )
+                        db.session.add(nova_movimentacao)
+                        db.session.commit()
+                        return redirect('estoque')
+                else:
+                    flash=('Tipo de registro inválido')
+                    return redirect('admin/estoque')
             
                 
 
@@ -233,7 +273,7 @@ def gerenciar_estoque():
             db.session.commit()
             
             return redirect('/admin/estoque')
-        return render_template('gerenciar_estoque.html', produtos=produtos, estoque=estoque, movimentacoes = movimentacoes)
+        return render_template('gerenciar_estoque.html', produtos = produtos, estoque = estoque, movimentacoes = movimentacoes)
     else:
         return redirect('/')
 

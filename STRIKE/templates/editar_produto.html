@@ -15,7 +15,7 @@
     
 </head>
 <body>
-    <header id="header">
+    <!--<header id="header">
         <div id="logo_container">
             <img src="{{ url_for('static', filename='Img/strike.png') }}" alt="Logo da empresa" id="logo_strike">
         </div>
@@ -29,18 +29,18 @@
                 </li>
             </ul>
         </nav>
-    </header>
-    <main>
-        <div id="edit-image-product">
+    </header>-->
+    <main class="container">
+        <div id="product-details">
             {% if imagens %}
                 <h2>Imagens do Produto</h2>
-                <div class="image-gallery">
+                <div class="product-gallery">
                     {% for imagem in imagens %}
-                        <div class="image-item">
-                            <img src="{{ url_for('static', filename='uploads/' ~ imagem.arquivo) }}" alt="Imagem do Produto" class="product-image">
-                            <form action="{{ url_for('deletar_imagem_produto', id=imagem.produto_id, imagem_id=imagem.id) }}" method="post">
-                                <button type="submit" class="delete-button">Deletar Imagem</button>
-                            </form>
+                        <div class="contrast-img">
+                            <!--<img src="{{ url_for('static', filename='uploads/produtos/' + imagem.arquivo) }}" alt="{{ produto.nome }}" title="{{ produto.nome}}">-->
+                        </div>
+                        <div class="gallery-thumbnails">
+                            <img src="{{url_for('static', filename='uploads/produtos/' + imagem.arquivo)}}" alt="imagem.arquivo">
 
                         </div>
                     {% endfor %}
@@ -52,7 +52,11 @@
                     </a>
                 </div>
             {% endif %}
+            <div class='product-info'>
+                <p class=""></p>
+            </div>
         </div>
+
     </main>
 </body>
 </html>

@@ -83,7 +83,7 @@
                                 <a href="/produto/{{ produto.id }}">
                                     <div class="product-card">
                                         {% for imagem in imagens %}
-                                        {% if imagem.produto_id == produto.id %}
+                                        {% if imagem.produto_id == produto.id and imagem.principal == True%}
                                             <img src="{{ url_for('static', filename='uploads/produtos/' + imagem.arquivo) }}" alt="{{ produto.nome }}" title="{{ produto.nome}}">
                                         {% else %}
                                             <div class="placeholder-image" title="Produto sem imagem">

@@ -78,8 +78,7 @@ background-color: #f0f0f0;
   padding-left: 50px;
   padding-right: 50px;
   padding-top: 20px;
-  margin-top:10%;
-  margin-bottom: 20px;
+  margin-top:135px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
   overflow-x: auto;
   max-width: 100%;
@@ -91,10 +90,107 @@ background-color: #f0f0f0;
   flex-wrap: wrap;
 }
 
+#historico-movimentacoes{
+  padding-bottom: 20px;
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-top: 20px;
+  margin-top:20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  overflow-x: auto;
+  max-width: 100%;
+  background-color: #eeeeee;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  vertical-align: middle;
+  flex-wrap: wrap;
+}
 form{
+
     margin: auto;
-    padding: 15px;
+    padding: 20px;
     background-color: #ffffff;
     width: 500px;
+    border-radius: 15px;
+    align-items: center;
+    vertical-align: middle;
+    justify-content: space-between;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
     
+}
+label,input, select, option{
+  font-family: "Oswald";   
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+input,select{
+  width: 100%;
+  margin-bottom: 20px;
+}
+table{
+border-collapse: collapse;
+margin: 0 auto;
+width: 100%;
+}
+th{
+  background-color: chocolate;
+}
+tr, td, th{
+  text-align: center;
+  padding: 10px;
+  margin: 0 auto;
+  border: black 1px solid;
+}
+tr:hover{
+  background-color: #a6a6a6;
+}
+th:hover{
+  background-color: rgb(160, 78, 20);
+}
+td:hover{
+  background-color: #636262;
+}
+tr:nth-child(odd) {background-color: #cfcfcf;}
+
+#botao_finalizar{
+  position: relative;
+  background-color: #f0f0f0;
+  color: rgb(0, 0, 0);
+  padding: 12px 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  padding: 15px;
+  transition: all .35s;
+  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
+  left: 10%;
+  right: 9%;
+}
+
+#botao_finalizar span{
+  position: relative;
+  z-index:2;
+  font-family: 'Oswald', sans-serif;
+}
+
+#botao_finalizar:after{
+  position: absolute;
+  content: "";
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: rgb(79,79,79);
+  transition: all .35s;
+  border-radius: 4px; 
+}
+
+#botao_finalizar:hover{
+  color: #ffffff;
+}
+
+#botao_finalizar:hover::after{
+  width: 100%;
 }

@@ -40,27 +40,61 @@
                         <option value="{{ produto.id }}">{{ produto.nome }}</option>
                     {% endfor %}
                 </select>
-
+                <br>
                 <label for="quantidade">Quantidade:</label>
                 <input type="number" name="quantidade" id="quantidade" min="1" required>
-
+                <br>
                 <label for="tamanho">Tamanho:</label>
                 <input type="text" name="tamanho" id="tamanho" required>
-
+                <br>
                 <label for="cor">Cor:</label>
                 <input type="text" name="cor" id="cor" required>
-
+                <br>
                 <label for="tipo_movimentacao">Tipo de Movimentação:</label>
                 <select name="tipo_movimentacao" id="tipo_movimentacao" required>
                     <option value="" disabled selected>Selecione o tipo</option>
                     <option value="ENTRADA">Entrada</option>
                     <option value="SAIDA">Saída</option>
                 </select>
-
-                <button type="submit">Atualizar Estoque</button>
+                <br><br>
+                <button type="submit" id = "botao_finalizar">
+                    <span >Atualizar Estoque</span>
+                </button>
             </form>
         </section>
-        <Section id="historico-movimentacoes">
+        <section id="historico-movimentacoes">
+            <h2>Estoque Atual</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>nome</th>
+                        <th>quant.</th>
+                        <th>tamanho</th>
+                        <th>cor</th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    {% for item in estoque %}
+                        <tr>
+                            <td>{{ item.produto.id }}</td>
+                            <td>{{ item.produto.nome }}</td>
+                            <td>{{ item.quantidade }}</td>
+                            <td>{{ item.tamanho }}</td>
+                            <td>{{ item.cor }}</td>
+                        </tr>
+                    {% else %}
+                        <tr >
+                            <td colspan="5">Nenhum registro no estoque</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                
+                
+            </table>
+        </section>
+        <section id="historico-movimentacoes">
             <h2>Histórico de movimentações</h2>
             <div>
                 <table>
@@ -72,11 +106,11 @@
                         <th>Cor</th>
                         <th>Tipo</th>
                         <th>Data</th>
-                        <th>ADM.</th>
+                        <th>Admin.</th>
                     </tr>  
                     </thead>
                     <tbody>
-                        {% for movimentacao in movimentacoes %}
+                        {% for movimentacao in movimentacoes | sort(attribute='data_mov_br', reverse = True) %}
                         <tr>
                                 <td>{{ movimentacao.produto.nome }}</td>
                                 <td>{{ movimentacao.quantidade }}</td>
@@ -86,11 +120,15 @@
                                 <td>{{ movimentacao.data_mov_br.strftime('%d/%m/%Y %H:%M') }}</td>
                                 <td>{{ movimentacao.admin.nome }}</td>  
                         </tr>
+                        {% else %}
+                        <tr >
+                            <td colspan="7">Nenhum registro de movimentação</td>
+                        </tr>
                         {%endfor%}
                     </tbody>
                 </table>
             </div>
-        </Section>
+        </section>
         
     </main>
 </body>

@@ -1,8 +1,8 @@
 /*==================== Background ====================*/
 
 html, body{
-  width: 98vw;
-  height: 98vh;
+  width: 100dvw;
+  height: 100dvh;
   padding: 0 auto;
   display: flex;
   justify-content:center;

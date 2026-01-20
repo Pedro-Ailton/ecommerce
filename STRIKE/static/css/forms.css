@@ -135,7 +135,7 @@ option{
   cursor: pointer;
   position: absolute;
   right: 40px;
-  top: calc(75% + 3px);
+  top: calc(75% + 2px);
   font-size: 20pt;
   color: #777;
 }
