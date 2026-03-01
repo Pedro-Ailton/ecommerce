@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{produto.nome}}</title>
+
+    <link rel="stylesheet" href="{{url_for('static', filename = 'css/products.css')}}">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='Img/strike_simb.png') }}" type="image/x-icon">
+</head>
+<body>
+    <header>
+
+    </header>
+    <main class= "container">
+        <div class="product-details">
+            {% if fotos %}
+                {% for foto in fotos %}
+                    <div class="product-gallery">
+                        {% if foto.principal == True%}
+                            <div class="contrast-img">
+                                <img src="{{url_for('static', filename='uploads/produtos/' + foto.arquivo)}}" alt="" class="imagem-principal">
+                            </div>
+                        {% endif %}
+                    </div>
+                        
+                {% endfor %}
+                <div class="image-placeholter">
+                    <div class="image-example">Produto sem imagem</div>
+                </div>
+            {% endif %}
+        </div>
+        
+            
+    </main>
+</body>
+</html>

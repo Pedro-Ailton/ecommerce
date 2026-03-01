@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shoelé - Admin</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='Img/strike_simb.png') }}" type="image/x-icon">
+</head>
+
+<body>
+    <header id="header2">
+        <div id="logo_container">
+            <img src= "{{ url_for('static', filename='Img/strike.png') }}" alt="Logo da empresa" id="logo_strike">
+        </div>
+        <nav>
+            <ul class="menu">
+                <li class="texto"><a href="#Produto">Calçados</a></li>
+                <li><a href="{{ url_for('login') }}"><span class="material-symbols-outlined" title="{{ nome_usuario }}">account_circle</span></a></li>
+                <li><a href="/admin/adicionar"><span class="material-symbols-outlined">add_2</span></a></li>
+                <li><a href="/admin/deletar"><span class="material-symbols-outlined">delete</span></a></li>
+                <li><a href="/logout"><span class="material-symbols-outlined">logout</span></a></li>
+                
+
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section id = "capa">
+            <div class="slider">
+                <div class="slides">
+                    {% for banner in banners %}
+                        
+                            <img src="{{ url_for('static', filename='Img/BANNERS/' + banner) }}" class="slide"/>
+                            <div class="slide-overlay">
+                                <span class="material-symbols-outlined">delete</span>
+                            </div>
+                        
+                    {% endfor %}
+                </div>
+                <button class="anterior" onclick="mudarSlide(-1)">❮</button>
+                <button class="proximo" onclick="mudarSlide(1)">❯</button>
+            </div>
+        </section>
+
+        <section id="admin-panel">
+            <h2>Painel de Administração</h2>
+            <p>Bem-vindo, {{ nome_usuario }}! Aqui você pode gerenciar os produtos da loja.</p>
+            <div class="admin-actions">
+                <a href="/admin/adicionar" class="admin-button"><span class="material-symbols-outlined">add_2</span><p>Adicionar produto</p></a>
+                <a href="/admin/deletar" class="admin-button"><span class="material-symbols-outlined">delete</span><p>Deletar produto</p></a>
+                <a href="/admin/estoque" class="admin-button"><span class="material-symbols-outlined">package_2</span><p>Gerenciar estoque</p></a>
+                <a href="/admin/categorias" class="admin-button"><span class="material-symbols-outlined">sell</span><p>Gerenciar categorias</p></a>
+            </div>
+        </section>
+            </div>
+        </section>
+        <section id = "Produto">
+            <h3>Nossos produtos</h3>
+                <div class="product-carousel-wrapper">
+                    <button class="anterior" onclick="scrollProdutos(-1)">❮</button>
+                    <div class="product-container" id="produtos">
+                        <div class="product-grid">
+                            {% for produto in produtos %}
+                                <a href="/admin/editar/{{ produto.id }}">
+                                    <div class="product-card">
+                                        {% for imagem in imagens %}
+                                        {% if imagem.produto_id == produto.id %}
+                                            <img src="{{ url_for('static', filename='uploads/produtos/' + imagem.arquivo) }}" alt="{{ produto.nome }}" title="{{ produto.nome}}">
+                                        {% else %}
+                                            <div class="placeholder-image" title="Produto sem imagem">
+                                                <div class="no-image">
+                                                    <span class="no-image">+</span>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                        {% endfor %}
+                                        
+                                            <h4>{{ produto.nome }}</h4>
+                                        
+                                    </div>
+                            {% endfor %}
+                                </a>
+                                    
+                        </div>
+                    </div>
+                    <button class="proximo" onclick="scrollProdutos(1)">❯</button>
+                </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Esse sistema é apenas uma simulação para estudos do desenvolverdor.</p>
+    </footer>
+
+<script src="{{ url_for('static', filename='JS/script.js') }}"></script>
+
+</body>
+</html>

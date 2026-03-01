@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strike - Categorias</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/logistics.css') }}">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='Img/strike_simb.png') }}" type="image/x-icon">
+</head>
+<body>
+    <main>
+        <a href="/admin">
+            <div class="voltar" title="Voltar para a página de administrador">
+                <span class="material-symbols-outlined">arrow_back</span>
+            </div>
+        </a>
+        <section class="container">
+            <h2>Categorias</h2>
+            <div class="list-container">
+                <ul>
+                    {% if categorias %}
+                        {% for categoria in categorias %}
+                            <li>{{ categoria.nome }}</li>
+                        {% endfor %}
+                    {% else %}
+                        <p>Nenhuma categoria registrada</p>
+                    {% endif %}
+                </ul>
+            </div>
+        </section>
+        <section class="container">
+            <h2>Adicionar categorias</h2>
+            <form action="{{ url_for('admin_categoria') }}" method="POST">
+                <label>Nome da categoria:</label>
+                <input type = "text" name = "nome_categoria" placeholder="adicione o nome para a categoria" required>
+                <button type="submit" id = "botao_finalizar" name="add_categoria">
+                    <span >Registrar</span>
+                </button>
+            </form>
+        </section>
+        <section class="container">
+            <h2>Assoiar categorias e produtos</h2>
+            <form action="{{ url_for('admin_categoria') }}" method="POST">
+                <label for="produto_id">Produto:</label>
+                <select name="produto_id" id="produto_id" required>
+                    <option value="" disabled selected>Selecione um produto</option>
+                    {% for produto in produtos %}
+                        <option value="{{ produto.id }}">{{ produto.nome }}</option>
+                    {% endfor %}
+                </select>
+                <label for="categoria_id">Categoria:</label>
+                <select name="categoria_id" id="categoria_id" required>
+                    <option value="" disabled selected>Selecione uma categoria</option>
+                    {% for categoria in categorias %}
+                        <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
+                    {% endfor %}
+                </select>
+                <br><br>
+                <button type="submit" id = "botao_finalizar" name="prod_cat">
+                    <span >Registrar </span>
+                </button>
+            </form>
+        </section>
+        <section class="container">
+            <h2>Associações</h2>
+            <div>
+                <table>
+                    <thead>
+                      <tr>
+                        <th>produto</th>
+                        <th>categoria</th>
+                    </tr>  
+                    </thead>
+                    <tbody>
+                        {% for cp in categoria_produtos%}
+                        <tr>
+                            <td>{{ cp.produto.nome }}</td>
+                            <td>{{ cp.categoria.nome }}</td>
+                        </tr>
+                        {% else %}
+                        <tr >
+                            <td colspan="2">Nenhum registro de associação</td>
+                        </tr>
+                        {%endfor%}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

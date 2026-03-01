@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shoelé - Deletar Produto</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/adm_fuctions.css') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='Img/strike_simb.png') }}" type="image/x-icon">
+</head>
+<body>
+    <div id="form-container2">
+        <a href="{{ url_for('admin') }}" class="voltar"><span>&times;</span></a>
+        <form action="{{ url_for('deletar_item') }}" method="post">
+            <h2 class="fonte-menu">Deletar Produto (Admin)</h2><br>
+
+            <label class="fonte-menu" for="id">Produto:</label>
+            <select name="produto_id" id="produto_id" required>
+                    <option value="" disabled selected>Selecione um produto</option>
+                    {% for produto in produtos %}
+                        <option value="{{ produto.id }}">{{ produto.nome }}</option>
+                    {% endfor %}
+                </select><br>
+            <button type="submit" onclick="return confirm('Tem certeza que deseja deletar este produto?');" id="deletar2">
+                <span class="fonte-menu">Deletar Produto</span>
+            </button><br><br>
+
+        </form>
+    </div>
+</body>
+</html>

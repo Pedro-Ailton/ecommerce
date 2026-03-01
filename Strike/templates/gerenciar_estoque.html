@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Estoque</title>
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/logistics.css') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='Img/strike_simb.png') }}" type="image/x-icon">
+</head>
+<body>
+    <a href="/admin">
+        <div class="voltar" title="Voltar para a página de administrador">
+            <span class="material-symbols-outlined">arrow_back</span>
+        </div>
+    </a>
+    <main>
+        <section class="container">
+            <h2>Gerenciar Estoque</h2>
+            <form method="POST" action="/admin/estoque">
+                <label for="produto_id">Produto:</label>
+                <select name="produto_id" id="produto_id" required>
+                    <option value="" disabled selected>Selecione um produto</option>
+                    {% for produto in produtos %}
+                        <option value="{{ produto.id }}">{{ produto.nome }}</option>
+                    {% endfor %}
+                </select>
+                <br>
+                <label for="quantidade">Quantidade:</label>
+                <input type="number" name="quantidade" id="quantidade" min="1" required>
+                <br>
+                <label for="tamanho">Tamanho:</label>
+                <input type="text" name="tamanho" id="tamanho" required>
+                <br>
+                <label for="cor">Cor:</label>
+                <input type="text" name="cor" id="cor" required>
+                <br>
+                <label for="tipo_movimentacao">Tipo de Movimentação:</label>
+                <select name="tipo_movimentacao" id="tipo_movimentacao" required>
+                    <option value="" disabled selected>Selecione o tipo</option>
+                    <option value="ENTRADA">Entrada</option>
+                    <option value="SAIDA">Saída</option>
+                </select>
+                <br><br>
+                <button type="submit" id = "botao_finalizar">
+                    <span >Atualizar Estoque</span>
+                </button>
+            </form>
+        </section>
+        <section class="container">
+            <h2>Estoque Atual</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>nome</th>
+                        <th>quant.</th>
+                        <th>tam.</th>
+                        <th>cor</th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    {% for item in estoque %}
+                        <tr>
+                            <td>{{ item.produto.id }}</td>
+                            <td>{{ item.produto.nome }}</td>
+                            <td>{{ item.quantidade }}</td>
+                            <td>{{ item.tamanho }}</td>
+                            <td>{{ item.cor }}</td>
+                        </tr>
+                    {% else %}
+                        <tr >
+                            <td colspan="5">Nenhum registro no estoque</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+        <section class="container">
+            <h2>Histórico de movimentações</h2>
+            <div>
+                <table>
+                    <thead>
+                      <tr>
+                        <th>prod.</th>
+                        <th>quant.</th>
+                        <th>tam.</th>
+                        <th>cor</th>
+                        <th>tipo</th>
+                        <th>data</th>
+                        <th>admin.</th>
+                    </tr>  
+                    </thead>
+                    <tbody>
+                        {% for movimentacao in movimentacoes | sort(attribute='data_mov_br', reverse = True) %}
+                        <tr>
+                                <td>{{ movimentacao.produto.nome }}</td>
+                                <td>{{ movimentacao.quantidade }}</td>
+                                <td>{{ movimentacao.estoque.tamanho }}</td>
+                                <td>{{ movimentacao.estoque.cor }}</td>
+                                <td>{{ movimentacao.tipo.value }}</td>
+                                <td>{{ movimentacao.data_mov_br.strftime('%d/%m/%Y %H:%M') }}</td>
+                                <td>{{ movimentacao.admin.nome }}</td>  
+                        </tr>
+                        {% else %}
+                        <tr >
+                            <td colspan="7">Nenhum registro de movimentação</td>
+                        </tr>
+                        {%endfor%}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+    </main>
+</body>
+</html>
